@@ -1,0 +1,163 @@
+{extend name='base'/}
+{block name='styles'}
+<link rel="stylesheet" href="__STATIC__/admin/plugins/iCheck/all.css">
+
+<style>
+    @media (min-width: 1200px){
+        .row {
+            margin-left: -15px;
+        }
+    }
+    @media (max-width: 767px){
+        body {
+            padding-left: 0;
+            padding-right: 0;
+        }
+    }
+
+
+
+</style>
+{/block}
+{block name='content'}
+<div class="box box-primary">
+    <div class="box-header with-border">
+        <h3 class="box-title">编辑文章</h3>
+    </div>
+    <form role="form" action="" method="post">
+        <div class="box-body">
+            <div class="form-group">
+                <label>文章标题</label>
+                <input type="text" class="form-control" name="arc_title" value="{$oldData['arc_title']}" placeholder="文章标题">
+            </div>
+            <div class="form-group">
+                <label>文章作者</label>
+                <input type="text" class="form-control" name="arc_author" value="{$oldData['arc_author']}" placeholder="文章作者">
+            </div>
+            <div class="form-group">
+                <label>文章排序</label>
+                <input type="number" class="form-control" value="{$oldData['arc_sort']}" name="arc_sort" placeholder="文章作者">
+            </div>
+            <div class="form-group">
+                <label>所属分类</label>
+                <select class="form-control select2 select2-hidden-accessible" name="cate_id" style="width: 100%;" tabindex="-1" aria-hidden="true">
+                    <option selected="selected" value="0">请选择分类</option>
+                    {foreach name='cateData' item='vo'}
+                    <option value="{$vo['cate_id']}"{if condition="$oldData['cate_id'] == $vo['cate_id']"} selected {/if}>{$vo['cate_name']}</option>
+                    {/foreach}
+                </select>
+            </div>
+            <div class="form-group">
+                <label style="display: block;">选择标签</label>
+                {foreach name='tagData' item='vo'}
+                <label>
+                    <input {if condition="in_array($vo['tag_id'],$tag_ids)"} checked {/if}type="checkbox" name="tag[]" class="minimal" value="{$vo['tag_id']}">
+                    {$vo['tag_name']}
+                </label>
+                {/foreach}
+            </div>
+            <div class="form-group">
+
+                <label style="display: block;">选择热门</label>
+
+                <label>
+                    <input type="radio" name="is_hot" class="minimal" value="1" {if condition="$oldData['is_hot'] eq 1"} checked {/if}>热门
+                </label>
+                <label>
+                    <input type="radio" name="is_hot" class="minimal" value="0" {if condition="$oldData['is_hot'] neq 1"} checked {/if}>不热门
+                </label>
+            </div>
+            <div class="form-group">
+                <div class="input-group">
+                    <input type="text" class="form-control" name="arc_thumb" readonly="" value="{$oldData['arc_thumb']}">
+                    <div class="input-group-btn">
+                        <button onclick="upImage(this)" class="btn btn-default" type="button">选择图片</button>
+                    </div>
+                </div>
+                <div class="input-group" style="margin-top:5px;">
+                    <img src="{$oldData['arc_thumb']}" class="img-responsive img-thumbnail" width="150">
+                    <em class="close" style="position:absolute; top: 0px; right: -14px;" title="删除这张图片" onclick="removeImg(this)">×</em>
+                </div>
+            </div>
+            <div class="form-group">
+                <label>文章摘要</label>
+                <input class="form-control input-lg" name="arc_digest" type="text" value="{$oldData['arc_digest']}" placeholder="文章摘要">
+            </div>
+            <div class="form-group">
+                <textarea id="container" name="arc_content" style="height:300px;width:100%;">
+                    {$oldData['arc_content']}
+                </textarea>
+            </div>
+        </div>
+        <!-- /.box-body -->
+        <input type="hidden" value="{:input('param.arc_id')}" name="arc_id">
+        <div class="box-footer">
+            <button type="submit" class="btn btn-primary">Submit</button>
+        </div>
+    </form>
+</div>
+{/block}
+
+
+{block name='scripts'}
+<!-- iCheck 1.0.1 -->
+<script>
+
+    var hdjs = {
+        //框架目录
+        'base': '__STATIC__/admin/plugins/hdjs',
+        //上传文件后台地址
+        'uploader': "{:url('system/component/uploader')}",
+        //获取文件列表的后台地址
+        'filesLists': "{:url('system/component/filesLists')}?",
+    };
+</script>
+<script src="__STATIC__/admin/plugins/hdjs/app/util.js"></script>
+<script src="__STATIC__/admin/plugins/hdjs/require.js"></script>
+<script src="__STATIC__/admin/plugins/hdjs/config.js"></script>
+<script src="__STATIC__/admin/plugins/iCheck/icheck.min.js"></script>
+<script>
+    //模块配置项
+    util.ueditor('container', {hash:2,data:'hd'}, function (editor) {
+        //这是回调函数 editor是百度编辑器实例
+    });
+    //上传图片
+    function upImage(obj) {
+        require(['util'], function (util) {
+            options = {
+                multiple: false,//是否允许多图上传
+                //data是向后台服务器提交的POST数据
+                data:{name:'后盾人',year:2099},
+            };
+            util.image(function (images) {          //上传成功的图片，数组类型 
+                $("[name='arc_thumb']").val(images[0]);
+                $(".img-thumbnail").attr('src', images[0]);
+            }, options)
+        });
+    }
+
+    //移除图片
+    function removeImg(obj) {
+        $(obj).prev('img').attr('src', 'resource/images/nopic.jpg');
+        $(obj).parent().prev().find('input').val('');
+    }
+</script>
+<script>
+
+    //iCheck for checkbox and radio inputs
+    $('input[type="checkbox"].minimal, input[type="radio"].minimal').iCheck({
+        checkboxClass: 'icheckbox_minimal-blue',
+        radioClass: 'iradio_minimal-blue'
+    });
+    //Red color scheme for iCheck
+    $('input[type="checkbox"].minimal-red, input[type="radio"].minimal-red').iCheck({
+        checkboxClass: 'icheckbox_minimal-red',
+        radioClass: 'iradio_minimal-red'
+    });
+    //Flat red color scheme for iCheck
+    $('input[type="checkbox"].flat-red, input[type="radio"].flat-red').iCheck({
+        checkboxClass: 'icheckbox_flat-green',
+        radioClass: 'iradio_flat-green'
+    });
+</script>
+{/block}

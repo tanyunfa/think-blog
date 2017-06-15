@@ -1,0 +1,64 @@
+{extend name='base'/}
+
+{block name='styles'}
+<style>
+    .layui-layer-btn .layui-layer-btn0 {
+        border-color:#dedede !important;
+        background-color: #f1f1f1 !important;
+        color: #222 !important;
+    }
+    .layui-layer-btn .layui-layer-btn1 {
+        border-color:#4898d5 !important;
+        background-color: #4898d5 !important;
+        color: #fff !important;
+    }
+</style>
+{/block}
+
+{block name='content'}
+<div class="box">
+    <div class="box-header">
+        <h3 class="box-title">标签列表</h3>
+    </div>
+    <!-- /.box-header -->
+    <div class="box-body">
+        <table id="example1" class="table table-bordered table-striped">
+            <thead>
+            <tr>
+                <th>编号</th>
+                <th width="50%">标签名称</th>
+                <th class="text-right">操作</th>
+
+            </tr>
+            </thead>
+            <tbody>
+            {foreach name='field' key='key' item='vo'}
+            <tr>
+                <td>{$vo['tag_id']}</td>
+                <td>{$vo['tag_name']}</td>
+                <td class="text-right">
+                    <a href="{:url('store',['tag_id'=>$vo['tag_id']])}" class="btn btn-primary">修改</a>
+                    <a href="#" class="btn btn-danger" onclick="del({$vo['tag_id']})">删除</a>
+                </td>
+            </tr>
+            {/foreach}
+            </tbody>
+
+        </table>
+    </div>
+    <!-- /.box-body -->
+</div>
+<!-- /.box -->
+<script>
+    function del(tag_id) {
+        layer.confirm('确认删除？', {
+            title:"删除栏目",
+            btn: ['取消','确认'] //按钮
+        }, function(){
+
+        }, function(){
+            location.href = "{:url('del')}" + '?tag_id=' + tag_id;
+        });
+    }
+</script>
+{/block}

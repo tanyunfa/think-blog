@@ -1,0 +1,101 @@
+{extend name='base'/}
+
+{block name='styles'}
+<style>
+    .layui-layer-btn .layui-layer-btn0 {
+        border-color: #dedede !important;
+        background-color: #f1f1f1 !important;
+        color: #222 !important;
+    }
+
+    .layui-layer-btn .layui-layer-btn1 {
+        border-color: #dd4b39 !important;
+        background-color: #dd4b39 !important;
+        color: #fff !important;
+    }
+</style>
+{/block}
+
+{block name='content'}
+<div class="box">
+    <div class="box-header">
+        <h3 class="box-title">文章列表</h3>
+    </div>
+    <!-- /.box-header -->
+    <div class="box-body">
+        <table id="example1" class="table table-bordered table-striped">
+            <thead>
+            <tr>
+                <th>编号</th>
+                <th>文章名称</th>
+                <th>文章作者</th>
+                <th>排序</th>
+                <th>所属分类</th>
+                <th class="text-center">添加时间</th>
+                <th class="text-right">操作</th>
+
+            </tr>
+            </thead>
+            <tbody>
+            {foreach name='field' item='vo'}
+            <tr>
+                <td>{$vo['arc_id']}</td>
+                <td>{$vo['arc_title']}</td>
+                <td>{$vo['arc_author']}</td>
+                <td>
+                    <input type="text" value="{$vo['arc_sort']}" onblur="changeSort(this,{$vo['arc_id']})"
+                           style="width: 50px">
+                </td>
+                <td>{$vo['cate_name']}</td>
+                <td class="text-center">{:date('Y-m-d',$vo['sendtime'])}</td>
+                <td class="text-right">
+                    <a href="{:url('edit',['arc_id'=>$vo['arc_id']])}" class="btn btn-primary">修改</a>
+                    <a href="#" class="btn btn-danger" onclick="del({$vo['arc_id']})">删除</a>
+                </td>
+            </tr>
+            {/foreach}
+            </tbody>
+
+        </table>
+
+    </div>
+    <!-- /.box-body -->
+</div>
+<!-- /.box -->
+{/block}
+{block name='scripts'}
+<script>
+    var hdjs = {
+        //框架目录
+        'base': '__STATIC__/admin/plugins/hdjs'
+    };
+</script>
+<script src="__STATIC__/admin/plugins/hdjs/app/util.js"></script>
+<script src="__STATIC__/admin/plugins/hdjs/require.js"></script>
+<script src="__STATIC__/admin/plugins/hdjs/config.js"></script>
+<script>
+
+    function changeSort(obj, arc_id) {
+        var arc_sort = $(obj).val();
+
+        $.post("{:url('changeSort')}", {arc_sort: arc_sort, arc_id: arc_id}, function (res) {
+            if (res.code) {
+                util.message(res.msg, 'refresh', 'success');
+            } else {
+                util.message(res.msg, 'back', 'error');
+            }
+        }, 'json')
+    }
+
+    function del(arc_id) {
+        layer.confirm('确认删除？', {
+            title:"删除栏目",
+            btn: ['取消','确认'] //按钮
+        }, function(){
+
+        }, function(){
+            location.href = "{:url('delToRecyle')}" + '?arc_id=' + arc_id;
+        });
+    }
+</script>
+{/block}

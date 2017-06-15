@@ -1,0 +1,116 @@
+﻿{extend name='base'}
+
+{block name='content'}
+<style>
+    .post {
+        padding: 20px 30px 30px 20px;
+        margin-bottom: 30px;
+    }
+</style>
+<main id="main" class="site-main" role="main">
+
+
+    <article id="post-1148"
+             class="mdl-card mdl-shadow--2dp mdl-cell mdl-cell--12-col post-1148 post type-post status-publish format-standard has-post-thumbnail hentry category-chastening category-disinclination tag-comments-2 tag-template">
+
+        <header class="entry-header">
+            <h1 class="entry-title post-title">{$articleContent['arc_title']}</h1>
+            <div class="entry-meta post-info">
+                <span class="theauthor"><i class="icon icon-user"></i><span class="author vcard"><span class="url fn"><a
+                        href="#">{$articleContent['arc_author']}</a></span></span></span><span
+                    class="posted">{:date('Y年m月d日',$articleContent['sendtime'])}</span><span class="comments"><i
+                    class="icon icon-comment"></i>{$articleContent['arc_click']} views</span><span class="thetags">
+                <i class="icon icon-tags"></i>
+                {foreach name="articleContent['tags']" item='vo'}
+                <a href="{:url('index/lists/index',['tag_id'=>$vo['tag_id']])}" rel="tag">{$vo['tag_name']}</a>
+                ,
+                {/foreach}
+                </span></div>
+            <!-- .entry-meta -->
+        </header><!-- .entry-header -->
+
+        <div class="entry-content">
+            {$articleContent['arc_content']}
+        </div><!-- .entry-content -->
+    </article><!-- #post-## -->
+    <div id="related_posts" class="related-posts mdl-grid mdl-cell mdl-cell--12-col">
+        <div class="related-item mdl-card mdl-shadow--2dp mdl-cell mdl-cell--6-col-desktop mdl-cell--4-col-tablet mdl-cell--4-col-phone">
+            {if condition="$pre_arc"}
+            <div class="relatedthumb">
+                <a href="{:url('index/content/index',['arc_id'=>$pre_arc['arc_id']])}"
+                   title="{$pre_arc['arc_title']}">
+                    <img width="120" height="120" src="{$pre_arc['arc_thumb']}"
+                         class="attachment-featured wp-post-image" alt="{$pre_arc['arc_title']}">
+                    <div class="post-format"><i class="material-icons">description</i></div>
+                </a>
+            </div>
+            <div class="post-data-container">
+                <h4>
+                    <a href="{:url('index/content/index',['arc_id'=>$pre_arc['arc_id']])}"
+                       title="{$pre_arc['arc_title']}">{$pre_arc['arc_title']}</a>
+                </h4>
+                <div class="post-info">
+                    <div class="meta-info">
+                        <span class="posted">{:date('Y年m月d日',$pre_arc['sendtime'])}</span><span class="comments"><i class="icon icon-views"></i>{$pre_arc['arc_click']} views</span>
+                    </div>
+                </div>
+            </div>
+            {else/}
+            <p style="text-align: center; line-height: 100px;">
+                没有上一页了
+            </p>
+            {/if}
+        </div>
+
+        <div class="related-item mdl-card mdl-shadow--2dp mdl-cell mdl-cell--6-col-desktop mdl-cell--4-col-tablet mdl-cell--4-col-phone">
+            {if condition="$next_arc"}
+                <div class="relatedthumb">
+                    <a href="{:url('index/content/index',['arc_id'=>$next_arc['arc_id']])}" title="{$next_arc['arc_title']}">
+                        <img width="120" height="120" src="{$next_arc['arc_thumb']}"
+                             class="attachment-featured wp-post-image" alt="{$next_arc['arc_title']}">
+                        <div class="post-format"><i class="material-icons">description</i></div>
+                    </a>
+                </div>
+                <div class="post-data-container">
+                    <h4>
+                        <a href="{:url('index/content/index',['arc_id'=>$next_arc['arc_id']])}" title="{$next_arc['arc_title']}">{$next_arc['arc_title']}</a>
+                    </h4>
+                    <div class="post-info">
+                        <div class="meta-info">
+                            <span class="posted">{:date('Y年m月d日',$next_arc['sendtime'])}</span><span class="comments"><i class="icon icon-comment"></i>{$next_arc['arc_click']} views</span>
+                        </div>
+                    </div>
+                </div>
+            {else/}
+                <p style="text-align: center; line-height: 100px;">
+                    没有下一页了
+                </p>
+            {/if}
+        </div>
+    </div>
+
+    <div class="next_prev_post mdl-grid mdl-cell mdl-cell--12-col">
+
+        {if condition="$pre_arc"}
+            <div class="left-button"><a href="{:url('index/content/index',['arc_id'=>$pre_arc['arc_id']])}"
+                                        rel="prev"
+                                        class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--colored"
+                                        data-upgraded=",MaterialButton,MaterialRipple">上一页<span
+                    class="mdl-button__ripple-container"><span class="mdl-ripple"></span></span></a></div>
+        {/if}
+        <div class="mdl-layout-spacer"></div>
+        {if condition="$next_arc"}
+            <div class="right-button"><a href="{:url('index/content/index',['arc_id'=>$next_arc['arc_id']])}" rel="next"
+                                         class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--colored"
+                                         data-upgraded=",MaterialButton,MaterialRipple">下一页<span
+                    class="mdl-button__ripple-container"><span class="mdl-ripple is-animating"
+                                                               style="width: 225.242px; height: 225.242px; transform: translate(-50%, -50%) translate(81px, 22px);"></span></span></a>
+            </div>
+        {/if}
+    </div>
+</main><!-- #main -->
+
+{/block}
+{block name='scripts'}
+
+{/block}
